@@ -38,14 +38,6 @@ API: http://localhost:8080. The first start creates the administrator account.
 ```
 Open http://localhost:5173
 
-### First sign-in (administrator)
-On first start the API creates an administrator (no demo users exist any more):
-
-| Email | Password |
-|---|---|
-| `admin@chakulasmart.com` | `Demo@1234` |
-
-Change both with `ADMIN_EMAIL` / `ADMIN_PASSWORD` **before the first start in production** (an existing admin is never overwritten), or change the password under *Account & password*. The log warns while the default is in use. Admins can add more admins (they get an email to set their own password).
 
 ## Accounts, approvals and passwords
 - **Individuals / families** register and sign in immediately.
