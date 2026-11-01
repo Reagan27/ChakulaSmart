@@ -28,13 +28,13 @@ On startup `DatabaseBootstrap` checks whether `chakulasmart` exists and, if not,
 
 ### 2. Run the API
 ```bash
-./run-backend.sh          # or: cd backend && mvn spring-boot:run
+./run-backend.sh          
 ```
 API: http://localhost:8080. The first start creates the administrator account.
 
 ### 3. Run the web app
 ```bash
-./run-frontend.sh         # or: cd frontend && npm install && npm run dev
+./run-frontend.sh        
 ```
 Open http://localhost:5173
 
@@ -68,39 +68,8 @@ Set these to send real email (any SMTP provider); `APP_BASE_URL` is used for the
 `SPRING_MAIL_HOST`, `SPRING_MAIL_PORT` (587), `SPRING_MAIL_USERNAME`, `SPRING_MAIL_PASSWORD`, `MAIL_FROM`, `APP_BASE_URL`.
 With no `SPRING_MAIL_HOST`, emails are printed in the backend log (so links still work in development) and listed as "Logged only" in Admin → Emails.
 
-## Configuration (environment variables)
 
-| Variable | Default | Purpose |
-|---|---|---|
-| `CHAKULA_DB_URL` | `jdbc:postgresql://localhost:5432/chakulasmart` | Database URL (the prefix avoids clashing with your tickets app's `DB_URL`) |
-| `CHAKULA_DB_USER` / `CHAKULA_DB_PASSWORD` | `tickets` / `tickets` | Credentials |
-| `JWT_SECRET` | dev value | **Set a random 32+ character secret in production** |
-| `JWT_EXPIRY_HOURS` | `72` | Token lifetime |
-| `CORS_ORIGINS` | localhost:5173, 4173, 3000 | Allowed browser origins |
-| `ADMIN_EMAIL` / `ADMIN_PASSWORD` / `ADMIN_NAME` | `admin@chakulasmart.com` / `Demo@1234` | First administrator (created once) |
-| `APP_BASE_URL` | `http://localhost:5173` | Public web URL used in emails |
-| `PORT` | `8080` | API port |
-| `VITE_API_URL` (frontend build) | empty | Public API URL when deploying the frontend separately (dev uses the Vite proxy) |
 
-## Project layout
-```
-backend/   Spring Boot API
-  src/main/java/com/chakulasmart/
-    config/    JWT, security, DB auto-create, SPA fallback
-    account/   register, login, roles, profile
-    catalog/   public foods, recipes, nutritionists, businesses, plans
-    diary/     meals, history, weight, rule-based suggestion engine
-    planner/   weekly plans, auto-generation, shopping lists, PDF export
-    care/      client-side consent, nutritionist workspace
-    biz/       business workspace, enquiries
-    billing/   plans + simulated subscriptions
-    admin/     approvals, user management, email log
-    roster/    clients/customers CRUD, CSV import, invitations
-    mail/      email sending + templates
-  src/main/resources/db/migration/   V1 schema, V2 Kenyan foods & recipes (Flyway)
-frontend/  React app (public site, auth, three dashboards)
-docker-compose.yml, run-backend.sh, run-frontend.sh
-```
 
 ## How the main features work
 - **Suggestion engine** (`SuggestionService`): scores every recipe by remaining budget per meal, calorie fit, your goal, favourite foods and recent repeats, and filters out allergens.
@@ -114,21 +83,13 @@ docker-compose.yml, run-backend.sh, run-frontend.sh
 - Businesses never receive health or diary data: they see only a sender's name and the contact that person chose to share.
 - BCrypt password hashing, stateless JWT. Add rate limiting and email verification before launch.
 
-## Adding photographs
-The site works without photos (illustrated plate and gradients). To use real images, save them in `frontend/public/images/`:
-`hero-food.jpg` (hero), `kenyan-food.jpg`, `meal-prep.jpg`, `nutritionist.jpg`. Free sources: Unsplash, Pexels. Fonts (DM Sans + Manrope) load from Google Fonts; self-host them for production if you prefer.
 
 ## Billing is simulated
 `/api/billing/subscribe` records a 30-day subscription **without charging anyone**. Before launch, replace it with M-Pesa (Daraja STK push) and verify the callback. The prices (KSh 250 / 750 / 1,000) are hypotheses from your plan, not validated rates. Paid features are not yet hard-gated server-side; add checks in the relevant services once payments are real.
 
-## Build for production
-```bash
-cd frontend && npm run build                       # outputs frontend/dist
-mkdir -p ../backend/src/main/resources/static && cp -r dist/* ../backend/src/main/resources/static/   # optional: serve the UI from the API jar
-cd ../backend && mvn -DskipTests package && java -jar target/chakulasmart-api-1.0.0.jar
-```
 
-## Roadmap ideas
+
+<!-- ## Roadmap ideas
 M-Pesa payments · email verification · server-side premium gating · vendor ordering · WhatsApp reminders · Swahili translation · more foods and county price data.
 
-*Nutrition values and prices are estimates for planning and are not medical advice.*
+*Nutrition values and prices are estimates for planning and are not medical advice.* -->

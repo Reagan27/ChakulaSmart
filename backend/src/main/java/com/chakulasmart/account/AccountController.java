@@ -84,7 +84,7 @@ public class AccountController {
         return accounts.userView(me.id());
     }
 
-    /** Ask for another role on the same account (hybrid model). Nutritionist and business roles wait for admin approval. */
+   
     @PostMapping("/roles")
     public Map<String, Object> addRole(@AuthenticationPrincipal CurrentUser me, @RequestBody RoleReq r) {
         accounts.requestRole(me.id(), r.role(), r.businessName(), r.specialization(), r.applicationNote());
